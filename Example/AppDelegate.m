@@ -21,6 +21,7 @@
 // THE SOFTWARE.
 
 #import "AppDelegate.h"
+#import "AFHTTPRequestOperation.h"
 
 #if __IPHONE_OS_VERSION_MIN_REQUIRED
     #import "GlobalTimelineViewController.h"
@@ -34,6 +35,23 @@
     - (BOOL)application:(UIApplication *)application 
     didFinishLaunchingWithOptions:(NSDictionary *)launchOptions 
     {
+        NSDate* oneMin = [NSDate dateWithTimeIntervalSinceNow:60];
+        static int count = 0;
+        static int succ = 0;
+        static int fail = 0;
+        while ([oneMin timeIntervalSinceDate:[NSDate date]]>0) {
+            count++;
+            AFHTTPRequestOperation* op = [[AFHTTPRequestOperation alloc] initWithRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://www.baidu.com"]]];//http://weburltohash.kuaibo.com/index.php?RefWeb=11
+            [op setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+                NSLog(@"succ %d", ++succ);
+            } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                NSLog(@"fail %d", ++fail);
+            }];
+            [op start];
+            [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeInterval:60 sinceDate:[NSDate date]]];
+        }
+        NSLog(@"count is %d", count);
+    /*
         NSURLCache *URLCache = [[NSURLCache alloc] initWithMemoryCapacity:4 * 1024 * 1024 diskCapacity:20 * 1024 * 1024 diskPath:nil];
         [NSURLCache setSharedURLCache:URLCache];
             
@@ -42,12 +60,12 @@
         UITableViewController *viewController = [[GlobalTimelineViewController alloc] initWithStyle:UITableViewStylePlain];
         self.navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
         self.navigationController.navigationBar.tintColor = [UIColor darkGrayColor];
-        
+        */
         self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
         self.window.backgroundColor = [UIColor whiteColor];
         self.window.rootViewController = self.navigationController;
         [self.window makeKeyAndVisible];
-        
+     
         return YES;
     }
 
@@ -63,6 +81,24 @@
     @synthesize postsArrayController = _postsArrayController;
 
     - (void)applicationDidFinishLaunching:(NSNotification *)notification {
+//        NSDate* date = [NSDate date];
+        NSDate* oneMin = [NSDate dateWithTimeIntervalSinceNow:60];
+        static int count = 0;
+        static int succ = 0;
+        static int fail = 0;
+        while ([oneMin timeIntervalSinceDate:[NSDate date]]>0) {
+            count++;
+            AFHTTPRequestOperation* op = [[AFHTTPRequestOperation alloc] initWithRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://www.baidu.com"]]];//http://weburltohash.kuaibo.com/index.php?RefWeb=11
+            [op setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+                NSLog(@"succ %d", ++succ);
+            } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                NSLog(@"fail %d", ++fail);
+            }];
+            [op start];
+            [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeInterval:60 sinceDate:[NSDate date]]];
+        }
+        NSLog(@"count is %d", count);
+        /*
         NSURLCache *URLCache = [[NSURLCache alloc] initWithMemoryCapacity:4 * 1024 * 1024 diskCapacity:20 * 1024 * 1024 diskPath:nil];
         [NSURLCache setSharedURLCache:URLCache];
         
@@ -79,6 +115,7 @@
         [[NSNotificationCenter defaultCenter] addObserverForName:kUserProfileImageDidLoadNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *notification) {
             [self.tableView reloadData];
         }];
+         */
     }
 
     - (BOOL)applicationShouldHandleReopen:(NSApplication *)application 
